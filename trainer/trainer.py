@@ -157,16 +157,12 @@ class Trainer(object):
 
     def visualize_tsne(self, epoch, iteration, dataset_name, features, labels, preds, save_path):
         """
-        t-SNE 可视化（按真实标签显示 real 和 fake 类别，使用鲜明颜色）
         """
-        # 根据真实标签分配类别
         categories = ['fake' if label == 1 else 'real' for label in labels]
         
-        # 转换为 numpy 数组
         features = np.array(features)
         categories = np.array(categories)
         
-        # t-SNE 降维
         tsne = TSNE(n_components=2, perplexity=30, n_iter=300, random_state=42)
         tsne_features = tsne.fit_transform(features)
         
@@ -196,7 +192,6 @@ class Trainer(object):
         plt.legend(fontsize=12)
         plt.tick_params(axis='both', which='major', labelsize=9)
         
-        # 保存图像（高分辨率）
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         plt.close()
         self.logger.info(f"t-SNE 图（按真实标签，鲜明颜色）保存至 {save_path}")
@@ -293,7 +288,6 @@ class Trainer(object):
                     writer.add_scalar(f'train_metric/{k}', v_avg, global_step=step_cnt)
                 self.logger.info(metric_str)
                 confi = self.model.confi_max
-                self.logger.info(f"Iter: {step_cnt}, Dynamic Threshold: {confi:.3f}")
                 for name, recorder in train_recorder_loss.items():
                     recorder.clear()
                 for name, recorder in train_recorder_metric.items():
