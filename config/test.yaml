@@ -1,0 +1,143 @@
+# log dir 
+log_dir: /opt/data/private/your/logfinal
+#log_dir: /data/cuixinjie/DsClip_V2/log
+lmdb: false
+rgb_dir: '/opt/data/private/datasets/rgb'
+lmdb_dir:  '/opt/data/private/datasets/lmdb'
+mode: train
+dry_run: false
+task_target: " "
+save_avg: True
+train_set: 'ori'
+clip_model_name: "ViT-L/14"
+pretrained: openai
+pretrain_size: 224
+
+device: 'cuda:0'
+mlp_dim: 256
+mlp_out_dim: 128
+head_num: 16  # for  clip_model_name: "ViT-L/14"
+# dataset
+all_dataset: [FaceForensics++, FF-F2F, FF-DF, FF-FS, FF-NT, FaceShifter, DeepFakeDetection, Celeb-DF-v1, Celeb-DF-v2, DFDCP, DFDC, DeeperForensics-1.0, UADFV,CDP]
+train_dataset: [FaceForensics++]
+target_dataset: [UCDDP]
+test_dataset: [uniface_ff]
+clip_layer: {23}
+#test_dataset: [FaceForensics++]
+dataset_json_folder: '/opt/data/private/your/dataset_json'
+
+compression: c23  # compression-level for videos
+train_batchSize: 32  # training batch size
+test_batchSize: 32   # test batch size
+target_batchSize : 10
+workers: 8   # number of data loading workers
+frame_num: {'train': 16, 'test': 32,'unlabeled': 4}   # number of frames to use per video in training and testing
+resolution: 256   # resolution of output image to network
+with_mask: true   # whether to include mask information in the input
+with_xray: true
+with_patch_labels: true
+with_landmark: false   # whether to include facial landmark information in the input
+# label settings
+label_dict:
+  # DFD
+  DFD_fake: 1
+  DFD_real: 0
+  # FF++ + FaceShifter(FF-real+FF-FH)
+  FF-SH: 1
+  FF-F2F: 1
+  FF-DF: 1
+  FF-FS: 1
+  FF-NT: 1
+  FF-FH: 1
+  FF-real: 0
+  # CelebDF
+  CelebDFv1_real: 0
+  CelebDFv1_fake: 1
+  CelebDFv2_real: 0
+  CelebDFv2_fake: 1
+  # DFDCP
+  DFDCP_Real: 0
+  DFDCP_FakeA: 1
+  DFDCP_FakeB: 1
+  # DFDC
+  DFDC_Fake: 1
+  DFDC_Real: 0
+  # DeeperForensics-1.0
+  DF_fake: 1
+  DF_real: 0
+  # UADFV
+  UADFV_Fake: 1
+  UADFV_Real: 0
+  # CDP
+  real: 0
+  fake: 1
+  #blendface
+  blendface_Real: 0
+  blendface_Fake: 1
+  # CDP
+  real: 0
+  fake: 1
+  # simswap
+  simswap_Real: 0
+  simswap_Fake: 1
+  # facedancer
+  facedancer_Real: 0
+  facedancer_Fake: 1
+    # uniface
+  uniface_Real: 0
+  uniface_Fake: 1
+
+
+
+# data augmentation
+use_data_augmentation: True  # Add this flag to enable/disable data augmentation
+data_aug:
+  flip_prob: 0.5
+  rotate_prob: 0.5
+  rotate_limit: [-10, 10]
+  blur_prob: 0.5
+  blur_limit: [3, 7]
+  brightness_prob: 0.5
+  brightness_limit: [-0.1, 0.1]
+  contrast_limit: [-0.1, 0.1]
+  quality_lower: 40
+  quality_upper: 100
+
+# mean and std for normalization
+mean: [0.48145466, 0.4578275, 0.40821073]
+std: [0.26862954, 0.26130258, 0.27577711]
+
+# optimizer config
+optimizer:
+  # choose between 'adam' and 'sgd'
+  type: adam
+  adam:
+    lr: 0.00008 # learning rate
+    beta1: 0.9  # beta1 for Adam optimizer
+    beta2: 0.999 # beta2 for Adam optimizer
+    eps: 0.00000001  # epsilon for Adam optimizer
+    weight_decay: 0.0005  # weight decay for regularization
+    amsgrad: false
+  sgd:
+    lr: 0.0002  # learning rate
+    momentum: 0.9  # momentum for SGD optimizer
+    weight_decay: 0.0005  # weight decay for regularization
+
+# training config
+lr_scheduler: null   # learning rate scheduler
+nEpochs: 60   # number of epochs to train for
+start_epoch: 0    # manual epoch number (useful for restarts)
+save_epoch: 10   # interval epochs for saving models
+rec_iter: 100   # interval iterations for recording
+
+manualSeed: 128  # manual seed for random number generation
+save_ckpt: true   # whether to save checkpoiccnt
+save_feat: false
+
+# metric
+metric_scoring: auc   # metric for evaluation (auc, acc, eer, ap)
+
+# cuda
+ngpu: 1   # number of GPUs to use
+cuda: true   # whether to use CUDA acceleration
+cudnn: true   # whether to use CuDNN for convolution operations
